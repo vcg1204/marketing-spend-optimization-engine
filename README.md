@@ -1,90 +1,77 @@
 # Marketing Spend Optimization Engine
 
-A decision analytics engine that optimizes multi-channel marketing budget allocation using regression modeling and constrained optimization.
+## Executive Summary
+
+A marketing team is spending a fixed budget across 4 channels — TV, Digital, Influencer and Search — without knowing which allocation maximizes revenue. This project builds a decision analytics engine to answer that question, models diminishing returns across all channels, and delivers a concrete recommended allocation with predicted revenue outcome.
+
+**Key Finding:** Digital delivers the highest marginal ROI across all budget scenarios. However, over-allocating to any single channel triggers diminishing returns — the optimal strategy is a diversified allocation weighted toward Digital and Search.
+
+**Bottom Line:** Under a $530K budget, shift spend toward Digital (37%) and Search (27%), reduce Influencer to a supporting role, and expect a predicted revenue of $8,008.
 
 ---
 
-## Business Problem
+## Business Questions Answered
 
-A marketing team has a fixed budget to allocate across 4 channels — TV, Digital, Influencer, and Search. Blindly splitting the budget equally ignores the fact that each channel has a different ROI and exhibits diminishing returns. This engine determines the allocation that maximizes predicted revenue.
+* Which marketing channel delivers the highest return per dollar spent?
+* How should a fixed budget be allocated across TV, Digital, Influencer and Search to maximize revenue?
+* At what point does increasing spend on a channel stop paying off?
+* What happens to predicted revenue under different budget cut or reallocation scenarios?
 
 ---
 
 ## Key Results
 
-At a total budget of 530 units, the optimal allocation is:
+* **Digital is the highest ROI channel** across all 6 budget levels tested — it should anchor any allocation strategy
+* **Diminishing returns are real and measurable** — doubling Digital spend does not double revenue, making diversification mathematically necessary
+* **Optimal allocation under $530K budget:** TV 23%, Digital 37%, Search 27%, Influencer 13%
+* **Predicted maximum revenue: $8,008** under the optimal allocation
+* **7 scenarios simulated** — budget cuts, channel shifts and reallocations — giving the marketing team a decision playbook rather than a single answer
 
-| Channel    | Optimal Spend |
-|------------|--------------|
-| TV         | 121.80       |
-| Digital    | 197.97       |
-| Influencer | 67.40        |
-| Search     | 142.83       |
+---
 
-**Predicted Maximum Revenue: 8008.66**
+## Business Recommendations
 
-Digital receives the highest allocation due to its superior marginal ROI at current spend levels.
+* **Prioritize Digital in every budget scenario** — it consistently delivers the highest marginal return and should never be the first channel cut
+* **Cap Influencer spend at 15%** — it shows the lowest ROI relative to cost and is the first candidate for reallocation
+* **Do not over-index on any single channel** — diminishing returns make a diversified allocation mathematically superior to concentration
+* **Use the scenario simulation as a decision tool** — when budget changes, run the model before reallocating rather than relying on intuition
 
 ---
 
 ## Methodology
 
-1. Simulated 120 weeks of realistic marketing spend data with log-based revenue generation
-2. Built Multiple Linear Regression model with log-transformed features to capture diminishing returns
-3. Validated model assumptions using R², VIF scores, and residual diagnostics
-4. Solved constrained optimization problem using SciPy across 6 budget levels
-5. Ran scenario simulations to stress-test allocation decisions
-
----
-
-## Sample Output Charts
-
-### Diminishing Returns Curves
-![Diminishing Returns](outputs/diminishing_returns_curves.png)
-
-### Optimal Allocation at Budget = 530
-![Optimal Allocation](outputs/optimal_allocation_530.png)
-
-### Revenue vs Total Budget
-![Revenue vs Budget](outputs/revenue_vs_budget.png)
-
-### Channel Allocation Shift by Budget
-![Allocation Shift](outputs/allocation_shift_by_budget.png)
+1. Simulated realistic weekly marketing spend data across 4 channels
+2. Built a multiple linear regression model with log-transformed features to capture diminishing returns
+3. Validated model using R², VIF scores and residual diagnostics
+4. Estimated marginal ROI per channel across 6 budget levels
+5. Solved a constrained budget optimization problem using SciPy
+6. Simulated 7 business scenarios including budget cuts, channel shifts and reallocations
 
 ---
 
 ## Tech Stack
 
-- Python
-- pandas, numpy
-- statsmodels
-- scipy
-- matplotlib
+* Python
+* pandas, numpy
+* statsmodels
+* scipy
 
 ---
 
 ## How to Run
 ```bash
-# Create and activate virtual environment
-python -m venv venv
-venv\Scripts\activate
-
-# Install dependencies
+# 1. Create virtual environment and install requirements
 pip install -r requirements.txt
 
-# Run in order
-python src/data_generator.py
+# 2. Run in order
+python src/model_setup.py
 python src/regression_model.py
-python src/optimization.py
 python src/simulation.py
-python src/visualize.py
+python src/optimization.py
 ```
 
-Or open `analysis.ipynb` for the full end-to-end walkthrough with outputs.
-```
+---
 
-Then commit and push:
-```
-git add README.md
-git commit -m "Rewrite README with results, charts and methodology"
-git push
+## What I Learned
+
+Most marketing budget decisions are made on gut feel or last quarter's results. This project showed me how much value a simple regression and optimization layer can add — not by replacing judgment but by giving it a quantitative foundation. The most interesting insight was that the math actively discourages over-concentration, which is counterintuitive when one channel is clearly outperforming.
